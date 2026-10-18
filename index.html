@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101a36">
+<title>QuizMaster — Play & Learn</title>
+<style>
+:root{--navy:#101a36;--blue:#1264ee;--yellow:#ffca28;--ink:#14213d;--muted:#64748b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#f4f7ff}
+header{background:var(--navy);color:white;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:1.45rem;font-weight:900;letter-spacing:.2px}.logo span{color:var(--yellow)}
+nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}nav a{color:#eaf0ff;text-decoration:none;padding:9px 12px;border-radius:12px;font-weight:650}nav a:hover{background:#20335c}
+.navbtn,.btn{border:0;border-radius:999px;padding:12px 20px;font-weight:800;font-size:1rem;cursor:pointer;text-decoration:none;display:inline-block}
+.navbtn{background:#7028f5;color:#fff}.hero{background:radial-gradient(circle at 82% 40%,#345cff 0,#183bc0 26%,#1132a6 55%,#0c267e 100%);color:white;padding:48px 7%;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center;overflow:hidden}
+.hero h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.04;margin:0 0 16px}.hero h1 span{color:var(--yellow);font-style:italic}.hero p{font-size:1.1rem;line-height:1.7;color:#edf2ff}.hero-art{text-align:center;font-size:clamp(5rem,12vw,9rem);filter:drop-shadow(0 12px 14px #071b5b66)}.book{font-size:4rem;display:block;margin-top:-15px}.primary{background:var(--yellow);color:#182443;box-shadow:0 5px 15px #ffca2850}.primary:hover{transform:translateY(-1px)}
+section{padding:30px 4%}.section-title{text-align:center;font-size:1.8rem;margin:0 0 24px}.categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.category{color:white;border-radius:18px;padding:22px 12px;text-align:center;box-shadow:0 8px 18px #17255416;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center}.category .emoji{font-size:2.7rem}.category h3{margin:8px 0 3px}.category p{margin:3px 0 12px}.category button{background:white;color:#17213d;border:0;border-radius:999px;padding:10px 18px;font-weight:800;cursor:pointer}.c1{background:linear-gradient(145deg,#16b9f4,#0756e8)}.c2{background:linear-gradient(145deg,#21df8a,#079a55)}.c3{background:linear-gradient(145deg,#ffb51e,#f36c19)}.c4{background:linear-gradient(145deg,#a65bff,#8124cb)}.c5{background:linear-gradient(145deg,#ff5872,#e51c50)}.c6{background:linear-gradient(145deg,#23d9d3,#00a9b4)}
+.how{background:#edf2ff}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center}.step{background:white;border-radius:16px;padding:18px}.step b{display:block;font-size:1.1rem;margin:8px}
+footer{background:var(--navy);color:#dfe7ff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.small{font-size:.9rem;color:#b8c5e5}
+#quizPanel{display:none;max-width:760px;margin:26px auto;padding:24px;background:white;border-radius:22px;box-shadow:0 12px 35px #15254b18}#quizPanel h2{margin-top:0}.quiz-top{display:flex;justify-content:space-between;color:var(--muted);font-weight:700}.progress{height:8px;background:#e5eaf5;border-radius:99px;overflow:hidden;margin:12px 0 22px}.progress span{display:block;height:100%;background:#1264ee;width:0;transition:width .2s}.answers{display:grid;gap:10px;margin:20px 0}.answer{border:2px solid #e1e7f2;background:#fff;padding:13px 15px;border-radius:12px;text-align:left;font-size:1rem;cursor:pointer}.answer:hover{border-color:#1264ee}.answer.selected{border-color:#1264ee;background:#edf4ff}.answer.correct{border-color:#16a34a;background:#e9f9ef}.answer.wrong{border-color:#dc2626;background:#fff0f0}.quiz-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.secondary{background:#e9efff;color:#17356e}.hidden{display:none!important}.result{text-align:center;padding:15px}.result .score{font-size:3rem;font-weight:900;color:#1264ee}
+@media(max-width:700px){header{justify-content:center}.hero{grid-template-columns:1fr;text-align:center;padding:38px 6%}.hero-art{font-size:5rem}.book{font-size:3rem}.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.category{padding:16px 8px;min-height:170px}.steps{grid-template-columns:1fr}.section-title{font-size:1.5rem}nav{justify-content:center}#quizPanel{margin:16px 4%;padding:18px}}
+@media(max-width:380px){.categories{grid-template-columns:1fr}.logo{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🧠 Quiz<span>Master</span></div>
+  <nav><a href="#home">Home</a><a href="#categories">Categories</a><a href="#how">How it works</a></nav>
+  <button class="navbtn" onclick="startQuiz('General Knowledge')">▶ Play Quiz</button>
+</header>
+<main>
+<section class="hero" id="home">
+  <div><h1>Welcome to<br><span>QuizMaster!</span></h1><p>Test Your Knowledge&nbsp; • &nbsp;Learn Something New&nbsp; • &nbsp;Challenge Yourself</p><button class="btn primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">▶ Start Quiz</button></div>
+  <div class="hero-art" aria-label="Lightbulb and book illustration">💡<span class="book">📖</span></div>
+</section>
+<section id="categories">
+  <h2 class="section-title">⭐ Choose a Category</h2>
+  <div class="categories">
+    <article class="category c1"><div class="emoji">🌍</div><h3>General Knowledge</h3><p>5 Questions</p><button onclick="startQuiz('General Knowledge')">Start Quiz ▸</button></article>
+    <article class="category c2"><div class="emoji">🧪</div><h3>Science</h3><p>5 Questions</p><button onclick="startQuiz('Science')">Start Quiz ▸</button></article>
+    <article class="category c3"><div class="emoji">🧮</div><h3>Mathematics</h3><p>5 Questions</p><button onclick="startQuiz('Mathematics')">Start Quiz ▸</button></article>
+    <article class="category c4"><div class="emoji">💻</div><h3>Computer</h3><p>5 Questions</p><button onclick="startQuiz('Computer')">Start Quiz ▸</button></article>
+    <article class="category c5"><div class="emoji">🏆</div><h3>Sports</h3><p>5 Questions</p><button onclick="startQuiz('Sports')">Start Quiz ▸</button></article>
+    <article class="category c6"><div class="emoji">🎬</div><h3>Entertainment</h3><p>5 Questions</p><button onclick="startQuiz('Entertainment')">Start Quiz ▸</button></article>
+  </div>
+</section>
+<section id="quizPanel" aria-live="polite">
+  <div id="quizContent">
+    <div class="quiz-top"><span id="quizCategory">Quiz</span><span id="questionCount">Question 1/5</span></div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <h2 id="questionText"></h2>
+    <div class="answers" id="answers"></div>
+    <div class="quiz-actions"><button class="btn secondary" onclick="quitQuiz()">✕ Exit</button><button class="btn primary" id="nextBtn" onclick="nextQuestion()" disabled>Next ➜</button></div>
+  </div>
+  <div id="resultContent" class="result hidden"><div style="font-size:3rem">🎉</div><h2>Quiz Completed!</h2><p id="resultMessage"></p><div class="score" id="scoreText"></div><p id="scoreDetail"></p><button class="btn primary" onclick="startQuiz(currentCategory)">↻ Try Again</button> <button class="btn secondary" onclick="quitQuiz()">Choose Category</button></div>
+</section>
+<section class="how" id="how"><h2 class="section-title">✨ How It Works?</h2><div class="steps"><div class="step"><div style="font-size:2.3rem">📋</div><b>1. Choose a Category</b><span>Select your favorite topic.</span></div><div class="step"><div style="font-size:2.3rem">▶️</div><b>2. Start the Quiz</b><span>Answer all the questions.</span></div><div class="step"><div style="font-size:2.3rem">🏆</div><b>3. See Your Result</b><span>Find out how much you scored!</span></div></div></section>
+</main>
+<footer><div class="logo">🧠 Quiz<span>Master</span></div><div>Learn&nbsp; • &nbsp;Play&nbsp; • &nbsp;Grow</div><div class="small">Made with ❤️ for Quiz Lovers</div></footer>
+<script>
+const quizData = {
+"General Knowledge":[
+{q:"भारत की राजधानी क्या है?",a:["मुंबई","नई दिल्ली","जयपुर","लखनऊ"],c:1},
+{q:"भारत का राष्ट्रीय पशु कौन-सा है?",a:["शेर","हाथी","बाघ","मोर"],c:2},
+{q:"एक सप्ताह में कितने दिन होते हैं?",a:["5","6","7","8"],c:2},
+{q:"ताजमहल किस शहर में है?",a:["आगरा","भोपाल","दिल्ली","पटना"],c:0},
+{q:"भारत का स्वतंत्रता दिवस कब मनाया जाता है?",a:["26 जनवरी","15 अगस्त","2 अक्टूबर","14 नवंबर"],c:1}],
+"Science":[
+{q:"पौधे अपना भोजन किस प्रक्रिया से बनाते हैं?",a:["श्वसन","प्रकाश संश्लेषण","वाष्पीकरण","पाचन"],c:1},
+{q:"पानी का रासायनिक सूत्र क्या है?",a:["CO₂","O₂","H₂O","NaCl"],c:2},
+{q:"लाल ग्रह किसे कहा जाता है?",a:["शुक्र","मंगल","बृहस्पति","शनि"],c:1},
+{q:"मनुष्य सांस लेने के लिए मुख्यतः कौन-सी गैस उपयोग करता है?",a:["ऑक्सीजन","हीलियम","हाइड्रोजन","कार्बन डाइऑक्साइड"],c:0},
+{q:"पृथ्वी का प्राकृतिक उपग्रह कौन है?",a:["सूर्य","मंगल","चंद्रमा","शुक्र"],c:2}],
+"Mathematics":[
+{q:"12 × 8 कितना होता है?",a:["86","92","96","108"],c:2},
+{q:"144 का वर्गमूल क्या है?",a:["10","11","12","14"],c:2},
+{q:"त्रिभुज के तीनों कोणों का योग कितना होता है?",a:["90°","180°","270°","360°"],c:1},
+{q:"25 + 37 = ?",a:["52","62","72","57"],c:1},
+{q:"एक दर्जन में कितनी वस्तुएँ होती हैं?",a:["10","12"," dozen में 15","20"],c:1}],
+"Computer":[
+{q:"CPU का पूरा नाम क्या है?",a:["Central Processing Unit","Computer Personal Unit","Central Program Utility","Core Power Unit"],c:0},
+{q:"कंप्यूटर का 'दिमाग' किसे कहा जाता है?",a:["माउस","CPU","मॉनिटर","कीबोर्ड"],c:1},
+{q:"इनमें से कौन-सा इनपुट डिवाइस है?",a:["मॉनिटर","प्रिंटर","कीबोर्ड","स्पीकर"],c:2},
+{q:"वेब पेज बनाने में कौन-सी भाषा आमतौर पर उपयोग होती है?",a:["HTML","HTTP","USB","PDF"],c:0},
+{q:"कंप्यूटर में डेटा स्थायी रूप से रखने के लिए क्या उपयोग होता है?",a:["RAM","कैश","SSD/हार्ड ड्राइव","रजिस्टर"],c:2}],
+"Sports":[
+{q:"क्रिकेट की एक टीम में मैदान पर कितने खिलाड़ी होते हैं?",a:["9","10","11","12"],c:2},
+{q:"ओलंपिक के प्रतीक में कितने छल्ले होते हैं?",a:["4","5","6","7"],c:1},
+{q:"फुटबॉल विश्व कप किस खेल से संबंधित है?",a:["हॉकी","फुटबॉल","टेनिस","क्रिकेट"],c:1},
+{q:"बैडमिंटन में किसका उपयोग होता है?",a:["पक","शटलकॉक","बेसबॉल","रग्बी बॉल"],c:1},
+{q:"टेनिस में शून्य स्कोर को क्या कहते हैं?",a:["Nil","Love","Zero point","Blank"],c:1}],
+"Entertainment":[
+{q:"फिल्में देखने के लिए आमतौर पर किस जगह जाते हैं?",a:["पुस्तकालय","सिनेमा हॉल","अस्पताल","डाकघर"],c:1},
+{q:"किस वाद्य यंत्र में काली और सफेद कुंजियाँ होती हैं?",a:["तबला","बांसुरी","पियानो","ढोल"],c:2},
+{q:"एनीमेशन में मुख्य रूप से क्या बनाया जाता है?",a:["स्थिर कर रसीद","चलती हुई दृश्य छवियाँ","केवल नक्शे","केवल ध्वनि"],c:1},
+{q:"गाना रिकॉर्ड करने के लिए कौन-सा उपकरण उपयोगी है?",a:["माइक्रोफोन","स्कैनर","राउटर","प्रोजेक्टर"],c:0},
+{q:"कहानी सुनाने वाली किताब को आम तौर पर क्या कहते हैं?",a:["उपन्यास/कहानी की किताब","कैलकुलेटर","एटलस ही","शब्दकोश ही"],c:0}]
+};
+let currentCategory="General Knowledge", currentQuestions=[], index=0, score=0, selected=null, locked=false;
+function startQuiz(category){
+ currentCategory=category; currentQuestions=quizData[category]; index=0; score=0;
+ document.getElementById('quizPanel').style.display='block';
+ document.getElementById('quizContent').classList.remove('hidden');
+ document.getElementById('resultContent').classList.add('hidden');
+ renderQuestion(); document.getElementById('quizPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderQuestion(){
+ selected=null;locked=false;const item=currentQuestions[index];
+ document.getElementById('quizCategory').textContent=currentCategory;
+ document.getElementById('questionCount').textContent=`Question ${index+1}/${currentQuestions.length}`;
+ document.getElementById('progressBar').style.width=`${index/currentQuestions.length*100}%`;
+ document.getElementById('questionText').textContent=item.q;
+ const wrap=document.getElementById('answers');wrap.innerHTML='';
+ item.a.forEach((answer,i)=>{const b=document.createElement('button');b.className='answer';b.textContent=String.fromCharCode(65+i)+'. '+answer;b.onclick=()=>selectAnswer(i,b);wrap.appendChild(b)});
+ const next=document.getElementById('nextBtn');next.disabled=true;next.textContent=index===currentQuestions.length-1?'See Result ✓':'Next ➜';
+}
+function selectAnswer(i,button){
+ if(locked)return;selected=i;locked=true;const item=currentQuestions[index];
+ [...document.querySelectorAll('.answer')].forEach((b,j)=>{b.disabled=true;if(j===item.c)b.classList.add('correct');if(j===i&&i!==item.c)b.classList.add('wrong')});
+ if(i===item.c)score++;document.getElementById('nextBtn').disabled=false;
+}
+function nextQuestion(){if(!locked)return;index++;if(index<currentQuestions.length){renderQuestion();}else showResult();}
+function showResult(){
+ document.getElementById('quizContent').classList.add('hidden');document.getElementById('resultContent').classList.remove('hidden');
+ document.getElementById('progressBar').style.width='100%';document.getElementById('scoreText').textContent=`${score}/${currentQuestions.length}`;
+ document.getElementById('resultMessage').textContent=score===currentQuestions.length?'शानदार! सभी जवाब सही हैं!':score>=3?'बहुत अच्छा! अभ्यास जारी रखो।':'अच्छी कोशिश! फिर से खेलकर अपना स्कोर बढ़ाओ।';
+ document.getElementById('scoreDetail').textContent=`आपका स्कोर ${Math.round(score/currentQuestions.length*100)}% है।`;
+}
+function quitQuiz(){document.getElementById('quizPanel').style.display='none';document.getElementById('categories').scrollIntoView({behavior:'smooth'});}
+</script>
+</body>
+</html>
